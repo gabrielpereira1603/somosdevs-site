@@ -11,14 +11,14 @@ class Index extends Component
         [
             'title' => 'SMI',
             'type' => 'web',
-            'image' => 'somosdevs/imgs/smi-web.png',
+            'image' => 'somosdevs/imgs/smi-2.png',
             'link' => 'https://somosdevteam.com/SMI/login',
             'desc' => 'Sistema de Manutenções Integrado - SMI',
         ],
         [
             'title' => 'SMI Mobile',
             'type' => 'mobile',
-            'image' => 'somosdevs/imgs/smi-mobile.png',
+            'image' => 'somosdevs/imgs/smi-mobile-2.png',
             'link' => '#',
             'desc' => 'Sistema de Manutenções Integrado - Mobile',
         ],
