@@ -9,5 +9,8 @@
 
         {{-- Nossos Servicos --}}
         <livewire:pages.sections.our-services.index />
+
+        {{-- Sobres nos --}}
+        <livewire:pages.sections.about.index/>
     </div>
 </div>
