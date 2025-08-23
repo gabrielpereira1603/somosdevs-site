@@ -7,5 +7,7 @@
         {{-- Porque escolher --}}
         <livewire:pages.sections.because-we.index />
 
+        {{-- Nossos Servicos --}}
+        <livewire:pages.sections.our-services.index />
     </div>
 </div>
