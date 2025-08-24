@@ -19,5 +19,7 @@
         {{-- Fluxo de serviço  --}}
         <livewire:pages.sections.workflow-service.index/>
 
+        {{-- Entre em contato  --}}
+        <livewire:pages.sections.contact.index/>
     </div>
 </div>

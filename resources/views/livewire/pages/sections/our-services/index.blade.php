@@ -87,9 +87,9 @@
 
             @if(empty($limitedServices))
                 <!-- Fallback quando nem 1 item -->
-                <div class="col-span-3 flex flex-col items-center justify-center py-20 bg-primary/10 dark:bg-primary/50 rounded-2xl shadow-lg">
+                <div class="col-span-3 flex flex-col items-center justify-center py-20 bg-primary/10 dark:bg-primary/20 border border-primary dark:border-primary rounded-2xl shadow-lg">
                     <i class="fa-solid fa-circle-exclamation text-5xl text-primary mb-6"></i>
-                    <h3 class="text-2xl font-bold text-secondary-black dark:text-white mb-4">
+                    <h3 class="text-center text-2xl font-bold text-secondary-black dark:text-white mb-4">
                         Nenhum serviço disponível nesta categoria
                     </h3>
                     <p class="text-gray-600 dark:text-gray-300 mb-6 max-w-lg text-center">

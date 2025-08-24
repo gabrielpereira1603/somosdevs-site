@@ -7,7 +7,8 @@
     <div class="absolute inset-0 bg-fixed bg-center hidden dark:block"
          style="background-image: url('{{ asset('somosdevs/imgs/bg-3-white.png') }}');"></div>
 
-    <!-- Overlay -->
+    <!-- Overlay para dar contraste -->
+    <div class="absolute inset-0 bg-white/40 dark:bg-black/70"></div>
 
     <!-- Conteúdo -->
     <div class="relative z-10 container mx-auto px-6">
