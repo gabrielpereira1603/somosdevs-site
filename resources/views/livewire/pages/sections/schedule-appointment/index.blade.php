@@ -24,7 +24,7 @@
                 <a href="tel:+5517991489765"
                    class="flex items-center gap-2 px-6 py-3 rounded-sm bg-secondary-black dark:bg-secondary-white dark:text-secondary-black font-poppins text-white shadow-md hover:bg-white/20 transition">
                     <i class="fa-solid fa-phone text-primary"></i>
-                    <span class="font-roboto">(17) 99148-9765</span>
+                    <span class="font-roboto">(67) 981957833</span>
                 </a>
 
                 <!-- Botão principal -->
