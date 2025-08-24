@@ -98,8 +98,8 @@
             </span>
                 </div>
 
-                <flux:brand href="#" logo="{{ asset('somosdevs/LOGO/apenas-logo.42.22.png') }}" name="Somos Dev's." class="px-2 dark:hidden" />
-                <flux:brand href="#" logo="{{ asset('somosdevs/LOGO/apenas-logo.42.22.png') }}" name="Somos Dev's." class="px-2 hidden dark:flex" />
+                <flux:brand href="#" logo="{{ asset('somosdevs/LOGO/apenaslogo.png') }}" name="Somos Dev's." class="px-2 dark:hidden" />
+                <flux:brand href="#" logo="{{ asset('somosdevs/LOGO/apenaslogo-bg-white.png') }}" name="Somos Dev's." class="px-2 hidden dark:flex"/>
 
                 <flux:input as="input" variant="filled" placeholder="Search..." icon="magnifying-glass" />
                 <flux:navlist variant="outline">

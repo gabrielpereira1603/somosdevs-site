@@ -39,7 +39,7 @@ class Index extends Component
         [
             'title' => 'Trilha do Java - CRM',
             'type' => 'web',
-            'image' => 'somosdevs/imgs/trilhadojava.jpg',
+            'image' => 'somosdevs/imgs/trilhadojava-2.png',
             'link' => '#',
             'desc' => 'Sistema CRM para vendas de ingressos online',
         ],

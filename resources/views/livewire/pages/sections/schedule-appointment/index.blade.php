@@ -22,14 +22,15 @@
             <div class="flex flex-col sm:flex-row items-center gap-4">
                 <!-- Telefone -->
                 <a href="tel:+5517991489765"
-                   class="flex items-center gap-2 px-6 py-3 rounded-sm bg-secondary-black dark:bg-secondary-white dark:text-secondary-black font-poppins text-white shadow-md hover:bg-white/20 transition">
-                    <i class="fa-solid fa-phone text-primary"></i>
-                    <span class="font-roboto">(67) 981957833</span>
+                   class="flex items-center gap-2 px-6 py-3 rounded-sm  bg-secondary-black dark:bg-secondary-white dark:text-secondary-black font-poppins text-white shadow-md hover:bg-secondary-black/90 dark:hover:bg-white/90 transition">
+                    <i class="fa-brands fa-whatsapp text-secondary-white dark:text-secondary-black text-2xl"></i>
+                    <span class="font-roboto">(67) 9 8195-7833</span>
                 </a>
 
                 <!-- Botão principal -->
                 <a href="#contato"
-                   class="px-8 py-3 rounded-sm bg-primary text-white font-bold shadow-lg hover:bg-primary/80 transition font-poppins">
+                   class="flex items-center gap-2 px-6 py-3 rounded-sm bg-primary text-white font-bold shadow-lg hover:bg-primary/80 transition font-poppins">
+                    <i class="fa-solid fa-envelope"></i>
                     Enviar E-mail
                 </a>
             </div>

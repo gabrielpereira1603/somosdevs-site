@@ -10,10 +10,14 @@
         {{-- Nossos Servicos --}}
         <livewire:pages.sections.our-services.index />
 
-        {{-- Sobres nos --}}
+        {{-- Sobre nós --}}
         <livewire:pages.sections.about.index/>
 
         {{-- Agende Consulta  --}}
         <livewire:pages.sections.schedule-appointment.index/>
+
+        {{-- Fluxo de serviço  --}}
+        <livewire:pages.sections.workflow-service.index/>
+
     </div>
 </div>
