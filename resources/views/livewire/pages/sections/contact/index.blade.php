@@ -22,7 +22,7 @@
                 Queremos entender melhor suas necessidades e preparar a solução ideal para o seu negócio.
                 Clique no botão abaixo e responda algumas perguntas rápidas. Assim, já entraremos em contato com uma proposta personalizada para você.
             </p>
-            <a href="#"
+            <a href="{{ route('budget') }}"
                class="font-poppins inline-block px-8 py-3 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary/80 transition">
                 Solicitar Orçamento →
             </a>

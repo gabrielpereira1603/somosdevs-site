@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="max-w-7xl mx-auto flex items-center justify-between sm:px-20 h-26">
+            <div class="max-w-7xl mx-auto flex items-center justify-between sm:px-16 h-26">
                 <!-- Logo -->
                 <a href="{{ url('/') }}" class="flex items-center">
                     <img src="{{ asset('somosdevs/LOGO/Logo-Horizontal-Azul.png') }}"
@@ -62,6 +62,7 @@
                     <a href="#" class="text-secondary-black dark:text-white p-2 rounded-xl font-poppins hover:text-primary dark:hover:text-[#00e2e2] transition-colors">Sobre</a>
                     <a href="#" class="text-secondary-black dark:text-white p-2 rounded-xl font-poppins hover:text-primary dark:hover:text-[#00e2e2] transition-colors">Contato</a>
                     <a href="#" class="text-secondary-black dark:text-white p-2 rounded-xl font-poppins hover:text-primary dark:hover:text-[#00e2e2] transition-colors">Serviços</a>
+                    <a href="#" class="text-secondary-black dark:text-white p-2 rounded-xl font-poppins hover:text-primary dark:hover:text-[#00e2e2] transition-colors">Trabalhe Conosco</a>
                     <a href="#" class="text-secondary-white font-bold py-2 px-4 font-poppins hover:text-secondary-white hover:bg-primary/90 transition-colors
                                rounded-sm bg-primary dark:bg-border-primary dark:hover:bg-primary/90">
                         Entre em Contato
@@ -104,9 +105,12 @@
                 <flux:input as="input" variant="filled" placeholder="Search..." icon="magnifying-glass" />
                 <flux:navlist variant="outline">
                     <flux:navlist.item icon="home" href="#" current >Home</flux:navlist.item>
-                    <flux:navlist.item icon="phone" href="#">Contatos</flux:navlist.item>
-                    <flux:navlist.item icon="document-text" href="#">Servicos</flux:navlist.item>
+                    <flux:navlist.item icon="code-bracket" href="#">Sobre Nós</flux:navlist.item>
                     <flux:navlist.item icon="calendar" href="#">Entre em Contato</flux:navlist.item>
+                    <flux:navlist.item icon="cog" href="#">Servicos</flux:navlist.item>
+                    <flux:navlist.item icon="question-mark-circle" href="#">Dúvida</flux:navlist.item>
+                    <flux:navlist.item icon="briefcase" href="#">Trabalhe Conosco</flux:navlist.item>
+                    <flux:button icon="envelope">Entre em Contato</flux:button>
                 </flux:navlist>
                 <flux:radio.group x-data variant="segmented" x-model="$flux.appearance">
                     <flux:radio value="light" icon="sun"></flux:radio>
