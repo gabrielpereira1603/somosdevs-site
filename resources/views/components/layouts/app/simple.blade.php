@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="max-w-7xl mx-auto flex items-center justify-between sm:px-18 h-26">
+            <div class="max-w-7xl mx-auto flex items-center justify-between sm:px-20 h-26">
                 <!-- Logo -->
                 <a href="{{ url('/') }}" class="flex items-center">
                     <img src="{{ asset('somosdevs/LOGO/Logo-Horizontal-Azul.png') }}"
@@ -60,7 +60,6 @@
                 <nav class="hidden lg:flex items-center gap-8">
                     <a href="#" class="text-secondary-black dark:text-white p-2 rounded-xl font-poppins hover:text-primary dark:hover:text-[#00e2e2] transition-colors">Home</a>
                     <a href="#" class="text-secondary-black dark:text-white p-2 rounded-xl font-poppins hover:text-primary dark:hover:text-[#00e2e2] transition-colors">Sobre</a>
-                    <a href="#" class="text-secondary-black dark:text-white p-2 rounded-xl font-poppins hover:text-primary dark:hover:text-[#00e2e2] transition-colors">Contato</a>
                     <a href="#" class="text-secondary-black dark:text-white p-2 rounded-xl font-poppins hover:text-primary dark:hover:text-[#00e2e2] transition-colors">Serviços</a>
                     <a href="#" class="text-secondary-black dark:text-white p-2 rounded-xl font-poppins hover:text-primary dark:hover:text-[#00e2e2] transition-colors">Trabalhe Conosco</a>
                     <a href="#" class="text-secondary-white font-bold py-2 px-4 font-poppins hover:text-secondary-white hover:bg-primary/90 transition-colors
@@ -106,7 +105,6 @@
                 <flux:navlist variant="outline">
                     <flux:navlist.item icon="home" href="#" current >Home</flux:navlist.item>
                     <flux:navlist.item icon="code-bracket" href="#">Sobre Nós</flux:navlist.item>
-                    <flux:navlist.item icon="calendar" href="#">Entre em Contato</flux:navlist.item>
                     <flux:navlist.item icon="cog" href="#">Servicos</flux:navlist.item>
                     <flux:navlist.item icon="question-mark-circle" href="#">Dúvida</flux:navlist.item>
                     <flux:navlist.item icon="briefcase" href="#">Trabalhe Conosco</flux:navlist.item>
