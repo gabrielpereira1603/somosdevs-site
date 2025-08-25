@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="max-w-7xl mx-auto flex items-center justify-between sm:px-16 h-26">
+            <div class="max-w-7xl mx-auto flex items-center justify-between sm:px-18 h-26">
                 <!-- Logo -->
                 <a href="{{ url('/') }}" class="flex items-center">
                     <img src="{{ asset('somosdevs/LOGO/Logo-Horizontal-Azul.png') }}"
