@@ -14,7 +14,7 @@
         <livewire:pages.sections.about.index/>
 
         {{-- Agende Consulta  --}}
-        <livewire:pages.sections.schedule-appointment.index/>
+        <livewire:pages.sections.online-quote.index/>
 
         {{-- Fluxo de serviço  --}}
         <livewire:pages.sections.workflow-service.index/>
