@@ -41,7 +41,7 @@
                             <div>
                                 <h4 class="text-lg md:text-xl font-semibold font-poppins mb-1">Email</h4>
                                 <p class="text-white/70 text-base font-roboto break-all">
-                                    contato@somosdevteam.com.br
+                                    admin@somosdevs.com
                                 </p>
                             </div>
                         </div>
