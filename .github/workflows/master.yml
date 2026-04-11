@@ -1,4 +1,4 @@
-name: SOMOS DEV - PROD DEPLOY
+name: SOMOS DEVS - DEPLOY
 
 on:
   push:
