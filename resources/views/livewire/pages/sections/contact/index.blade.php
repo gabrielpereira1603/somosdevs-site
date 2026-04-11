@@ -55,7 +55,7 @@
                             <div>
                                 <h4 class="text-lg md:text-xl font-semibold font-poppins mb-1">Whatsapp</h4>
                                 <p class="text-white/70 text-base font-roboto">
-                                    +55 (67) 98195-7833
+                                    +55 (17) 97600-1413
                                 </p>
                             </div>
                         </div>
