@@ -1,4 +1,4 @@
-name: CI GeoSegBar - Homologação
+name: SOMOS DEV - PROD DEPLOY
 
 on:
   push:
