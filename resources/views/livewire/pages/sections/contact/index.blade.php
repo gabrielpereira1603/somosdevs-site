@@ -62,8 +62,6 @@
                     </div>
                 </div>
 
-
-
                 <!-- Redes sociais -->
                 <div class="mt-12">
                     <div class="flex items-center gap-4 mb-6">
