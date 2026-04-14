@@ -16,10 +16,10 @@
             class="fixed inset-0 z-[120] overflow-hidden bg-primary transition-[opacity,transform,filter] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[transform,opacity,filter]">
             <video id="intro-video"
                 class="absolute inset-0 h-full w-full scale-[1.01] object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
-                data-src-desktop="{{ asset('somosdevs/Motion/Motion LOGO Horizontal.mp4') }}"
-                data-src-mobile="{{ asset('somosdevs/Motion/Motion LOGO.mp4') }}" autoplay muted playsinline
+                data-src-desktop="{{ asset('somosdevs/Motion/motion_logo_black_horiz.mp4') }}"
+                data-src-mobile="{{ asset('somosdevs/Motion/Mmotion_logo_black_vert.mp4') }}" autoplay muted playsinline
                 preload="auto">
-                <source id="intro-video-source" src="{{ asset('somosdevs/Motion/Motion LOGO Horizontal.mp4') }}"
+                <source id="intro-video-source" src="{{ asset('somosdevs/Motion/motion_logo_black_horiz.mp4') }}"
                     type="video/mp4">
             </video>
 

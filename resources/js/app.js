@@ -15,13 +15,28 @@ const HASH_LINK_SELECTOR = 'a[href^="#"]';
 const SIDEBAR_CLOSE_SELECTOR = '[data-sidebar-close]';
 
 const TOTAL_FRAMES = 150;
-const FRAMES_BASE_PATH = '/somosdevs/animacao';
+const FRAMES_BASE_PATH = '/somosdevs/animations/scroll';
 const FRAME_COMPLETE_AT_SCROLL = 0.94;
+const IDLE_TOTAL_FRAMES = 240;
+const IDLE_FRAMES_BASE_PATH = '/somosdevs/animations/fixed';
+const IDLE_LOOP_DURATION_SECONDS = 8;
+const IDLE_LOOP_BLEND_RATIO = 0.1;
+const IDLE_LOOP_VEIL_ALPHA = 0.1;
+const IDLE_LOOP_TOP_THRESHOLD = 8;
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+const smoothstep = (value) => {
+    const t = clamp(value, 0, 1);
+
+    return t * t * (3 - (2 * t));
+};
 
 const createFrameUrl = (index) => {
     return `${FRAMES_BASE_PATH}/img${String(index + 1).padStart(3, '0')}.jpg`;
+};
+
+const createIdleFrameUrl = (index) => {
+    return `${IDLE_FRAMES_BASE_PATH}/img${String(index + 1).padStart(3, '0')}.jpg`;
 };
 
 const splitToAnimatedChars = (element) => {
@@ -110,24 +125,35 @@ const initWaveHeroAnimation = () => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const dprLimit = isMobile ? 1.5 : 2;
 
-    const frameUrls = Array.from({ length: TOTAL_FRAMES }, (_, index) => createFrameUrl(index));
-    const loadedFrames = new Array(TOTAL_FRAMES);
+    const scrollFrameUrls = Array.from({ length: TOTAL_FRAMES }, (_, index) => createFrameUrl(index));
+    const idleFrameUrls = Array.from({ length: IDLE_TOTAL_FRAMES }, (_, index) => createIdleFrameUrl(index));
+    const scrollLoadedFrames = new Array(TOTAL_FRAMES);
+    const idleLoadedFrames = new Array(IDLE_TOTAL_FRAMES);
 
     const frameState = {
         progress: 0,
     };
 
-    let drawnFrameIndex = -1;
-    let preloadIndex = 0;
+    const idleLoopState = {
+        phase: 0,
+        progress: 0,
+    };
+
+    let drawnFrameSignature = '';
+    let scrollPreloadIndex = 0;
+    let idlePreloadIndex = 0;
     let drawRaf = 0;
     let resizeRaf = 0;
+    let idleLoopTimeline = null;
+    let idleLoopActive = false;
+    let idleBlendState = null;
 
-    const getClosestLoadedFrame = (targetIndex) => {
+    const getClosestLoadedFrame = (targetIndex, loadedFrames, totalFrames) => {
         if (loadedFrames[targetIndex]) {
             return loadedFrames[targetIndex];
         }
 
-        for (let offset = 1; offset < TOTAL_FRAMES; offset += 1) {
+        for (let offset = 1; offset < totalFrames; offset += 1) {
             const backward = targetIndex - offset;
             const forward = targetIndex + offset;
 
@@ -135,7 +161,7 @@ const initWaveHeroAnimation = () => {
                 return loadedFrames[backward];
             }
 
-            if (forward < TOTAL_FRAMES && loadedFrames[forward]) {
+            if (forward < totalFrames && loadedFrames[forward]) {
                 return loadedFrames[forward];
             }
         }
@@ -143,14 +169,16 @@ const initWaveHeroAnimation = () => {
         return null;
     };
 
-    const drawImageCover = (image) => {
+    const drawImageCover = (image, alpha = 1, clear = true) => {
         const canvasWidth = canvas.width;
         const canvasHeight = canvas.height;
         const imageWidth = image.naturalWidth || image.width;
         const imageHeight = image.naturalHeight || image.height;
 
-        context.fillStyle = '#070d19';
-        context.fillRect(0, 0, canvasWidth, canvasHeight);
+        if (clear) {
+            context.fillStyle = '#070d19';
+            context.fillRect(0, 0, canvasWidth, canvasHeight);
+        }
 
         if (!imageWidth || !imageHeight) {
             return;
@@ -162,25 +190,69 @@ const initWaveHeroAnimation = () => {
         const offsetX = (canvasWidth - drawWidth) / 2;
         const offsetY = (canvasHeight - drawHeight) / 2;
 
+        context.save();
+        context.globalAlpha = clamp(alpha, 0, 1);
         context.drawImage(image, offsetX, offsetY, drawWidth, drawHeight);
+        context.restore();
     };
 
-    const drawFrameAtProgress = (progress) => {
+    const drawFrameForProgress = (progress, totalFrames, loadedFrames, sourceKey) => {
         const clampedProgress = clamp(progress, 0, 1);
-        const frameIndex = Math.round(clampedProgress * (TOTAL_FRAMES - 1));
+        const frameIndex = Math.round(clampedProgress * (totalFrames - 1));
+        const frameSignature = `${sourceKey}:${frameIndex}`;
 
-        if (frameIndex === drawnFrameIndex) {
+        if (frameSignature === drawnFrameSignature) {
             return;
         }
 
-        const frame = getClosestLoadedFrame(frameIndex);
+        const frame = getClosestLoadedFrame(frameIndex, loadedFrames, totalFrames);
 
         if (!frame) {
             return;
         }
 
         drawImageCover(frame);
-        drawnFrameIndex = frameIndex;
+        drawnFrameSignature = frameSignature;
+    };
+
+    const drawIdleBlendFrame = (fromProgress, toProgress, mix, veilAlpha) => {
+        const fromIndex = Math.round(clamp(fromProgress, 0, 1) * (IDLE_TOTAL_FRAMES - 1));
+        const toIndex = Math.round(clamp(toProgress, 0, 1) * (IDLE_TOTAL_FRAMES - 1));
+        const fromFrame = getClosestLoadedFrame(fromIndex, idleLoadedFrames, IDLE_TOTAL_FRAMES);
+        const toFrame = getClosestLoadedFrame(toIndex, idleLoadedFrames, IDLE_TOTAL_FRAMES);
+
+        if (!fromFrame && !toFrame) {
+            return;
+        }
+
+        context.fillStyle = '#070d19';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        if (fromFrame) {
+            drawImageCover(fromFrame, 1, false);
+        }
+
+        if (toFrame) {
+            drawImageCover(toFrame, mix, false);
+        }
+
+        if (veilAlpha > 0) {
+            context.save();
+            context.globalAlpha = clamp(veilAlpha, 0, 1);
+            context.fillStyle = '#050505';
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.restore();
+        }
+
+        drawnFrameSignature = '';
+    };
+
+    const drawScrollFrameAtProgress = (progress) => {
+        drawFrameForProgress(progress, TOTAL_FRAMES, scrollLoadedFrames, 'scroll');
+    };
+
+    const drawIdleFrameAtProgress = (progress) => {
+        drawFrameForProgress(progress, IDLE_TOTAL_FRAMES, idleLoadedFrames, 'idle');
     };
 
     const queueDraw = () => {
@@ -190,11 +262,27 @@ const initWaveHeroAnimation = () => {
 
         drawRaf = window.requestAnimationFrame(() => {
             drawRaf = 0;
-            drawFrameAtProgress(frameState.progress);
+
+            if (idleLoopActive) {
+                if (idleBlendState) {
+                    drawIdleBlendFrame(
+                        idleBlendState.fromProgress,
+                        idleBlendState.toProgress,
+                        idleBlendState.mix,
+                        idleBlendState.veilAlpha,
+                    );
+                    return;
+                }
+
+                drawIdleFrameAtProgress(idleLoopState.progress);
+                return;
+            }
+
+            drawScrollFrameAtProgress(frameState.progress);
         });
     };
 
-    const loadFrame = (index, highPriority = false) => {
+    const loadFrame = (index, urls, loadedFrames, highPriority = false) => {
         if (loadedFrames[index]) {
             return Promise.resolve(loadedFrames[index]);
         }
@@ -211,39 +299,36 @@ const initWaveHeroAnimation = () => {
             image.onload = () => {
                 loadedFrames[index] = image;
                 resolve(image);
-
-                if (index === 0 || index === drawnFrameIndex || index === Math.round(frameState.progress * (TOTAL_FRAMES - 1))) {
-                    queueDraw();
-                }
+                queueDraw();
             };
 
             image.onerror = () => {
                 resolve(null);
             };
 
-            image.src = frameUrls[index];
+            image.src = urls[index];
         });
     };
 
-    const ensureFrameNeighborhood = (progress) => {
-        const centerIndex = Math.round(clamp(progress, 0, 1) * (TOTAL_FRAMES - 1));
+    const ensureFrameNeighborhood = (progress, totalFrames, urls, loadedFrames) => {
+        const centerIndex = Math.round(clamp(progress, 0, 1) * (totalFrames - 1));
 
         for (let offset = 0; offset <= 3; offset += 1) {
             const next = centerIndex + offset;
             const prev = centerIndex - offset;
 
-            if (next < TOTAL_FRAMES && !loadedFrames[next]) {
-                loadFrame(next);
+            if (next < totalFrames && !loadedFrames[next]) {
+                loadFrame(next, urls, loadedFrames);
             }
 
             if (prev >= 0 && !loadedFrames[prev]) {
-                loadFrame(prev);
+                loadFrame(prev, urls, loadedFrames);
             }
         }
     };
 
-    const preloadInBackground = () => {
-        if (preloadIndex >= TOTAL_FRAMES) {
+    const preloadScrollInBackground = () => {
+        if (scrollPreloadIndex >= TOTAL_FRAMES) {
             return;
         }
 
@@ -251,16 +336,46 @@ const initWaveHeroAnimation = () => {
             const batchSize = isMobile ? 4 : 7;
             const tasks = [];
 
-            while (preloadIndex < TOTAL_FRAMES && tasks.length < batchSize) {
-                if (!loadedFrames[preloadIndex]) {
-                    tasks.push(loadFrame(preloadIndex));
+            while (scrollPreloadIndex < TOTAL_FRAMES && tasks.length < batchSize) {
+                if (!scrollLoadedFrames[scrollPreloadIndex]) {
+                    tasks.push(loadFrame(scrollPreloadIndex, scrollFrameUrls, scrollLoadedFrames));
                 }
 
-                preloadIndex += 1;
+                scrollPreloadIndex += 1;
             }
 
             Promise.all(tasks).finally(() => {
-                preloadInBackground();
+                preloadScrollInBackground();
+            });
+        };
+
+        if ('requestIdleCallback' in window) {
+            window.requestIdleCallback(runBatch, { timeout: 450 });
+            return;
+        }
+
+        window.setTimeout(runBatch, 24);
+    };
+
+    const preloadIdleInBackground = () => {
+        if (idlePreloadIndex >= IDLE_TOTAL_FRAMES) {
+            return;
+        }
+
+        const runBatch = () => {
+            const batchSize = isMobile ? 4 : 9;
+            const tasks = [];
+
+            while (idlePreloadIndex < IDLE_TOTAL_FRAMES && tasks.length < batchSize) {
+                if (!idleLoadedFrames[idlePreloadIndex]) {
+                    tasks.push(loadFrame(idlePreloadIndex, idleFrameUrls, idleLoadedFrames));
+                }
+
+                idlePreloadIndex += 1;
+            }
+
+            Promise.all(tasks).finally(() => {
+                preloadIdleInBackground();
             });
         };
 
@@ -300,11 +415,94 @@ const initWaveHeroAnimation = () => {
         });
     };
 
+    const shouldRunIdleLoop = () => {
+        if (prefersReducedMotion) {
+            return false;
+        }
+
+        return window.scrollY <= IDLE_LOOP_TOP_THRESHOLD;
+    };
+
+    const stopIdleLoop = () => {
+        if (!idleLoopTimeline || !idleLoopActive) {
+            return;
+        }
+
+        idleLoopTimeline.pause();
+        idleLoopActive = false;
+        idleBlendState = null;
+    };
+
+    const startIdleLoop = () => {
+        if (!idleLoopTimeline || idleLoopActive) {
+            return;
+        }
+
+        idleLoopTimeline.pause(0);
+        idleLoopState.phase = 0;
+        idleLoopState.progress = 0;
+        idleBlendState = null;
+        idleLoopActive = true;
+        queueDraw();
+        idleLoopTimeline.play(0);
+    };
+
+    const syncIdleLoopWithViewport = () => {
+        if (shouldRunIdleLoop()) {
+            startIdleLoop();
+            return;
+        }
+
+        stopIdleLoop();
+    };
+
     gsap.set(textLayer, {
         transformOrigin: '50% 50%',
         force3D: true,
         willChange: 'transform, opacity, filter',
     });
+
+    if (!prefersReducedMotion) {
+        idleLoopTimeline = gsap.timeline({
+            paused: true,
+            repeat: -1,
+            defaults: {
+                ease: 'none',
+            },
+        });
+
+        idleLoopTimeline.to(idleLoopState, {
+            phase: 1,
+            duration: IDLE_LOOP_DURATION_SECONDS,
+            ease: 'none',
+            onUpdate: () => {
+                const phase = idleLoopState.phase % 1;
+                const blendStart = 1 - IDLE_LOOP_BLEND_RATIO;
+
+                idleLoopState.progress = phase;
+
+                if (phase < blendStart) {
+                    idleBlendState = null;
+                } else {
+                    const blendRaw = (phase - blendStart) / IDLE_LOOP_BLEND_RATIO;
+                    const blend = smoothstep(blendRaw);
+                    const veilAlpha = Math.sin(blend * Math.PI) * IDLE_LOOP_VEIL_ALPHA;
+
+                    idleBlendState = {
+                        fromProgress: phase,
+                        toProgress: 0,
+                        mix: blend,
+                        veilAlpha,
+                    };
+
+                    ensureFrameNeighborhood(0, IDLE_TOTAL_FRAMES, idleFrameUrls, idleLoadedFrames);
+                }
+
+                ensureFrameNeighborhood(phase, IDLE_TOTAL_FRAMES, idleFrameUrls, idleLoadedFrames);
+                queueDraw();
+            },
+        });
+    }
 
     const runEntryAnimation = () => {
         if (prefersReducedMotion) {
@@ -388,16 +586,32 @@ const initWaveHeroAnimation = () => {
 
     resizeCanvas();
 
-    loadFrame(0, true).then(() => {
+    Promise.all([
+        loadFrame(0, scrollFrameUrls, scrollLoadedFrames, true),
+        loadFrame(0, idleFrameUrls, idleLoadedFrames, true),
+    ]).then(() => {
         frameState.progress = 0;
-        drawFrameAtProgress(0);
+        idleLoopState.phase = 0;
+        idleLoopState.progress = 0;
+
+        if (shouldRunIdleLoop()) {
+            startIdleLoop();
+            return;
+        }
+
+        drawScrollFrameAtProgress(0);
     });
 
     runEntryAnimation();
 
-    Promise.all(Array.from({ length: 12 }, (_, index) => loadFrame(index, true))).finally(() => {
-        preloadIndex = 12;
-        preloadInBackground();
+    Promise.all([
+        ...Array.from({ length: 12 }, (_, index) => loadFrame(index, scrollFrameUrls, scrollLoadedFrames, true)),
+        ...Array.from({ length: 18 }, (_, index) => loadFrame(index, idleFrameUrls, idleLoadedFrames, true)),
+    ]).finally(() => {
+        scrollPreloadIndex = 12;
+        idlePreloadIndex = 18;
+        preloadScrollInBackground();
+        preloadIdleInBackground();
     });
 
     if (!prefersReducedMotion) {
@@ -412,6 +626,14 @@ const initWaveHeroAnimation = () => {
                 scrub: 0.18,
                 fastScrollEnd: true,
                 invalidateOnRefresh: true,
+                onUpdate: (self) => {
+                    if (self.progress > 0.001) {
+                        stopIdleLoop();
+                        return;
+                    }
+
+                    syncIdleLoopWithViewport();
+                },
             },
         });
 
@@ -422,7 +644,7 @@ const initWaveHeroAnimation = () => {
                 duration: FRAME_COMPLETE_AT_SCROLL,
                 onUpdate: () => {
                     queueDraw();
-                    ensureFrameNeighborhood(frameState.progress);
+                    ensureFrameNeighborhood(frameState.progress, TOTAL_FRAMES, scrollFrameUrls, scrollLoadedFrames);
                 },
             },
             0,
@@ -451,6 +673,16 @@ const initWaveHeroAnimation = () => {
     }
 
     window.addEventListener('resize', scheduleResize, { passive: true });
+    window.addEventListener('scroll', syncIdleLoopWithViewport, { passive: true });
+
+    document.addEventListener('visibilitychange', () => {
+        if (document.hidden) {
+            stopIdleLoop();
+            return;
+        }
+
+        syncIdleLoopWithViewport();
+    });
 };
 
 const bootWaveHero = () => {
