@@ -13,29 +13,15 @@
 
     @if ($showIntro)
         <div id="intro-overlay"
-            class="fixed inset-0 z-[120] overflow-hidden bg-primary transition-[opacity,transform,filter] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[transform,opacity,filter]">
+            class="fixed inset-0 z-[120] overflow-hidden bg-[#010101] transition-[opacity,transform,filter] duration-[1150ms] ease-[cubic-bezier(0.16,1,0.3,1)] will-change-[transform,opacity,filter]">
             <video id="intro-video"
                 class="absolute inset-0 h-full w-full scale-[1.01] object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.16,1,0.3,1)]"
                 data-src-desktop="{{ asset('somosdevs/Motion/motion_logo_black_horiz.mp4') }}"
-                data-src-mobile="{{ asset('somosdevs/Motion/Mmotion_logo_black_vert.mp4') }}" autoplay muted playsinline
+                data-src-mobile="{{ asset('somosdevs/Motion/motion_logo_black_vert.mp4') }}" autoplay muted playsinline
                 preload="auto">
                 <source id="intro-video-source" src="{{ asset('somosdevs/Motion/motion_logo_black_horiz.mp4') }}"
                     type="video/mp4">
             </video>
-
-            <div id="intro-beam"
-                class="pointer-events-none absolute -inset-x-24 top-0 h-[58%] bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.34),transparent_62%)] opacity-80 transition-[transform,opacity] duration-[1250ms] ease-[cubic-bezier(0.16,1,0.3,1)]">
-            </div>
-            <div id="intro-shutter"
-                class="pointer-events-none absolute inset-x-0 bottom-0 h-[46%] bg-gradient-to-t from-primary via-primary/80 to-transparent transition-[transform,opacity] duration-[980ms] ease-[cubic-bezier(0.16,1,0.3,1)]">
-            </div>
-
-            <div
-                class="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.22),transparent_45%),radial-gradient(circle_at_80%_80%,rgba(255,255,255,0.16),transparent_38%)]">
-            </div>
-            <div
-                class="pointer-events-none absolute inset-0 bg-gradient-to-t from-primary/35 via-transparent to-primary/25">
-            </div>
         </div>
     @endif
 
@@ -127,7 +113,7 @@
                 <div class="flex items-center justify-between px-4 pt-3">
                     <a href="{{ url('/') }}" class="inline-flex items-center">
                         <img src="{{ asset('somosdevs/LOGO/Logo-Horizontal-Branco.png') }}" alt="Logo Somos Devs"
-                            class="h-14 w-auto">
+                            class="h-20 w-auto">
                     </a>
 
                     <flux:sidebar.toggle icon="x-mark" data-sidebar-close="true"
@@ -199,8 +185,6 @@
                 const overlay = document.getElementById('intro-overlay');
                 const video = document.getElementById('intro-video');
                 const videoSource = document.getElementById('intro-video-source');
-                const introBeam = document.getElementById('intro-beam');
-                const introShutter = document.getElementById('intro-shutter');
                 const shell = document.getElementById('site-shell');
 
                 const notifySiteReady = () => {
@@ -251,14 +235,6 @@
                     video.classList.add('scale-[1.09]');
                     shell.classList.remove('opacity-0');
                     shell.classList.add('opacity-100');
-
-                    if (introBeam) {
-                        introBeam.classList.add('translate-y-[-22%]', 'opacity-0');
-                    }
-
-                    if (introShutter) {
-                        introShutter.classList.add('translate-y-full', 'opacity-0');
-                    }
 
                     document.body.classList.remove('overflow-hidden');
                     notifySiteReady();
