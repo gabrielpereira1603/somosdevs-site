@@ -1,4 +1,4 @@
-<section data-wave-hero class="relative h-[220vh] w-full overflow-clip bg-[#070d19]">
+<section id="home" data-wave-hero class="relative h-[220vh] w-full overflow-clip bg-[#070d19]">
     <div data-wave-stage class="sticky top-0 h-screen w-full overflow-hidden">
         <canvas data-wave-canvas class="absolute inset-0 h-full w-full" aria-hidden="true"></canvas>
 

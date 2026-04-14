@@ -1,10 +1,11 @@
-<div class="relative w-full py-20 bg-white dark:bg-secondary-black">
+<div id="sobre" class="relative w-full py-20 bg-white dark:bg-secondary-black">
     <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
 
         <!-- Texto Sobre Nós -->
         <div class="space-y-6">
             <!-- Subtítulo -->
-            <span class="text-sm uppercase tracking-wider text-primary font-poppins font-bold rounded-lg border border-primary px-2 py-2">
+            <span
+                class="text-sm uppercase tracking-wider text-primary font-poppins font-bold rounded-lg border border-primary px-2 py-2">
                 Sobre Nós
             </span>
 
@@ -57,7 +58,7 @@
 
             <!-- CTA -->
             <a href="#contato"
-               class="font-poppins inline-block px-6 py-3 mt-6 bg-primary text-white rounded-lg shadow-md hover:bg-primary/80 transition">
+                class="font-poppins inline-block px-6 py-3 mt-6 bg-primary text-white rounded-lg shadow-md hover:bg-primary/80 transition">
                 Fale Conosco →
             </a>
         </div>

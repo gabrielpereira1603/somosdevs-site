@@ -1,7 +1,8 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 const HERO_SELECTOR = '[data-wave-hero]';
 const STAGE_SELECTOR = '[data-wave-stage]';
@@ -9,6 +10,9 @@ const CANVAS_SELECTOR = '[data-wave-canvas]';
 const TEXT_SELECTOR = '[data-wave-text]';
 const TITLE_MAIN_SELECTOR = '[data-wave-title-main]';
 const TITLE_ACCENT_SELECTOR = '[data-wave-title-accent]';
+const SECTION_LINK_SELECTOR = '[data-scroll-link]';
+const HASH_LINK_SELECTOR = 'a[href^="#"]';
+const SIDEBAR_CLOSE_SELECTOR = '[data-sidebar-close]';
 
 const TOTAL_FRAMES = 150;
 const FRAMES_BASE_PATH = '/somosdevs/animacao';
@@ -472,8 +476,86 @@ const bootWaveHero = () => {
     }, 5200);
 };
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bootWaveHero, { once: true });
-} else {
+const initSectionSmoothScroll = () => {
+    if (document.body.dataset.sectionScrollInitialized === 'true') {
+        return;
+    }
+
+    const links = Array.from(new Set([
+        ...document.querySelectorAll(SECTION_LINK_SELECTOR),
+        ...document.querySelectorAll(HASH_LINK_SELECTOR),
+    ]));
+
+    if (!links.length) {
+        return;
+    }
+
+    document.body.dataset.sectionScrollInitialized = 'true';
+
+    const getHeaderOffset = () => {
+        const header = document.querySelector('header');
+
+        if (!header) {
+            return 0;
+        }
+
+        return Math.round(header.getBoundingClientRect().height) + 8;
+    };
+
+    const closeSidebarIfNeeded = () => {
+        if (!window.matchMedia('(max-width: 1023px)').matches) {
+            return;
+        }
+
+        const closeButton = document.querySelector(SIDEBAR_CLOSE_SELECTOR);
+
+        if (closeButton instanceof HTMLElement) {
+            window.setTimeout(() => {
+                closeButton.click();
+            }, 120);
+        }
+    };
+
+    links.forEach((link) => {
+        link.addEventListener('click', (event) => {
+            const fallbackTarget = (link.getAttribute('href') || '').replace('#', '');
+            const targetId = link.getAttribute('data-scroll-target') || fallbackTarget;
+
+            if (!targetId) {
+                return;
+            }
+
+            const targetElement = document.getElementById(targetId);
+
+            if (!targetElement) {
+                return;
+            }
+
+            event.preventDefault();
+            closeSidebarIfNeeded();
+
+            const duration = window.matchMedia('(max-width: 767px)').matches ? 1.05 : 1.22;
+
+            gsap.to(window, {
+                duration,
+                ease: 'power3.inOut',
+                scrollTo: {
+                    y: targetElement,
+                    offsetY: getHeaderOffset(),
+                    autoKill: true,
+                },
+            });
+        }, { passive: false });
+    });
+};
+
+const bootAppInteractions = () => {
     bootWaveHero();
+    initSectionSmoothScroll();
+};
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootAppInteractions, { once: true });
+} else {
+    bootAppInteractions();
 }
