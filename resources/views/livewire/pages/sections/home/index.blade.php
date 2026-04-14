@@ -1,36 +1,26 @@
-<div class="relative w-full h-screen">
-    <!-- bg light -->
-    <div class="absolute inset-0 bg-cover bg-center dark:hidden"
-         style="background-image: url('{{ asset('somosdevs/download-2.svg') }}');"></div>
+<section data-wave-hero class="relative h-[220vh] w-full overflow-clip bg-[#070d19]">
+    <div data-wave-stage class="sticky top-0 h-screen w-full overflow-hidden">
+        <canvas data-wave-canvas class="absolute inset-0 h-full w-full" aria-hidden="true"></canvas>
 
-    <!-- bg dark -->
-    <div class="absolute inset-0 bg-cover bg-center hidden dark:block"
-         style="background-image: url('{{ asset('somosdevs/download-2.svg') }}');"></div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/35 to-black/55"></div>
+        <div
+            class="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(54,64,243,0.28),rgba(7,13,25,0.2)_45%,rgba(7,13,25,0.78)_100%)]">
+        </div>
+        <div aria-hidden="true"
+            class="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-44 bg-gradient-to-b from-transparent via-black/78 to-[#050505]">
+        </div>
+        <div aria-hidden="true"
+            class="pointer-events-none absolute -bottom-12 inset-x-0 z-[1] h-24 bg-[#050505] opacity-95 blur-3xl">
+        </div>
 
-
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-black/20 "></div>
-
-    <!-- Conteúdo -->
-    <div class="relative z-10 flex flex-col items-center justify-center text-center h-full px-6">
-        <h1 class="text-4xl md:text-6xl font-bold font-poppins
-                   text-secondary-white dark:text-secondary-white">
-            Desenvolvendo
-            <span class="text-primary dark:text-primary">soluções tecnológicas</span>
-            que ajudam a expandir seus negócios
-        </h1>
-
-        <p class="mt-6 max-w-3xl text-lg md:text-xl font-roboto text-gray-200 dark:text-gray-200">
-            Inovação segura e eficiência para grandes e pequenas empresas,
-            desbloqueando o verdadeiro potencial da sua empresa.
-        </p>
-
-        <a href="#contato"
-           class="mt-8 inline-block bg-primary dark:bg-primary
-                  hover:bg-primary/80 dark:hover:bg-primary/80
-                  text-white dark:text-secondary-white font-semibold
-                  px-6 py-3 rounded-md transition">
-            Fale conosco →
-        </a>
+        <div class="relative z-10 flex h-full items-center justify-center px-6">
+            <div data-wave-text class="mx-auto max-w-6xl text-center will-change-transform">
+                <h1 data-wave-title
+                    class="font-poppins text-3xl font-bold leading-[1.1] text-secondary-white sm:text-4xl lg:text-6xl xl:text-7xl">
+                    <span data-wave-title-main class="block">Soluções tecnológicas</span>
+                    <span data-wave-title-accent class="mt-2 block text-primary">que fazem o seu negócio avançar!</span>
+                </h1>
+            </div>
+        </div>
     </div>
-</div>
+</section>
