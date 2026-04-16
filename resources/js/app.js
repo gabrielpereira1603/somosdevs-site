@@ -10,6 +10,20 @@ const CANVAS_SELECTOR = '[data-wave-canvas]';
 const TEXT_SELECTOR = '[data-wave-text]';
 const TITLE_MAIN_SELECTOR = '[data-wave-title-main]';
 const TITLE_ACCENT_SELECTOR = '[data-wave-title-accent]';
+const HERO_EYEBROW_SELECTOR = '[data-wave-eyebrow]';
+const HERO_DESCRIPTION_SELECTOR = '[data-wave-description]';
+const HERO_ACTIONS_SELECTOR = '[data-wave-actions]';
+const HERO_PROOF_SELECTOR = '[data-wave-proof]';
+const HERO_SCROLL_CUE_SELECTOR = '[data-wave-scroll-cue]';
+const HERO_SCROLL_CUE_ICON_SELECTOR = '[data-wave-scroll-cue-icon]';
+const HERO_SCROLL_CUE_PULSE_SELECTOR = '[data-wave-scroll-cue-pulse]';
+const HERO_DYNAMIC_ACCENT_PHRASES = [
+    'crescer com software sob medida',
+    'ganhar escala com automa\u00e7\u00f5es inteligentes',
+    'evoluir com tecnologia sem gargalos',
+    'transformar opera\u00e7\u00e3o em vantagem competitiva',
+];
+const HERO_ACCENT_ROTATION_DELAY = 2.35;
 const SECTION_LINK_SELECTOR = '[data-scroll-link]';
 const HASH_LINK_SELECTOR = 'a[href^="#"]';
 const SIDEBAR_CLOSE_SELECTOR = '[data-sidebar-close]';
@@ -107,6 +121,13 @@ const initWaveHeroAnimation = () => {
     const textLayer = hero.querySelector(TEXT_SELECTOR);
     const titleMain = hero.querySelector(TITLE_MAIN_SELECTOR);
     const titleAccent = hero.querySelector(TITLE_ACCENT_SELECTOR);
+    const eyebrow = hero.querySelector(HERO_EYEBROW_SELECTOR);
+    const description = hero.querySelector(HERO_DESCRIPTION_SELECTOR);
+    const actions = hero.querySelector(HERO_ACTIONS_SELECTOR);
+    const proof = hero.querySelector(HERO_PROOF_SELECTOR);
+    const scrollCue = hero.querySelector(HERO_SCROLL_CUE_SELECTOR);
+    const scrollCueIcon = hero.querySelector(HERO_SCROLL_CUE_ICON_SELECTOR);
+    const scrollCuePulse = hero.querySelector(HERO_SCROLL_CUE_PULSE_SELECTOR);
 
     if (!stage || !canvas || !textLayer || !titleMain || !titleAccent) {
         return;
@@ -147,6 +168,74 @@ const initWaveHeroAnimation = () => {
     let idleLoopTimeline = null;
     let idleLoopActive = false;
     let idleBlendState = null;
+    let scrollCueTimeline = null;
+    let accentSwapTimer = null;
+    let accentSwapTimeline = null;
+
+    const accentPhrases = Array.from(new Set([
+        (titleAccent.textContent || '').trim(),
+        ...HERO_DYNAMIC_ACCENT_PHRASES,
+    ].filter(Boolean)));
+
+    let accentPhraseIndex = 0;
+
+    const createCharsScatterState = () => {
+        return {
+            opacity: 0,
+            y: (index) => 94 - ((index % 5) * 9),
+            x: (index) => Math.sin(index * 0.7) * 28,
+            rotation: (index) => Math.sin(index * 0.45) * 16,
+            filter: 'blur(9px)',
+            transformOrigin: '50% 100%',
+            willChange: 'transform, opacity, filter',
+        };
+    };
+
+    const createCharsRestState = () => {
+        return {
+            opacity: 1,
+            y: 0,
+            x: 0,
+            rotation: 0,
+            filter: 'blur(0px)',
+        };
+    };
+
+    const createCharsInAnimation = () => {
+        return {
+            ...createCharsRestState(),
+            duration: 1.06,
+            stagger: {
+                each: 0.026,
+                from: 'start',
+            },
+        };
+    };
+
+    const createCharsOutAnimation = () => {
+        return {
+            ...createCharsScatterState(),
+            duration: 0.84,
+            stagger: {
+                each: 0.022,
+                from: 'end',
+            },
+            ease: 'power3.in',
+        };
+    };
+
+    const buildAccentChars = (phrase) => {
+        if (!titleAccent) {
+            return [];
+        }
+
+        titleAccent.textContent = phrase;
+        delete titleAccent.dataset.waveCharsSplit;
+
+        return splitToAnimatedChars(titleAccent);
+    };
+
+    let currentAccentChars = buildAccentChars(accentPhrases[accentPhraseIndex]);
 
     const getClosestLoadedFrame = (targetIndex, loadedFrames, totalFrames) => {
         if (loadedFrames[targetIndex]) {
@@ -504,16 +593,145 @@ const initWaveHeroAnimation = () => {
         });
     }
 
+    const runScrollCueLoop = () => {
+        if (!scrollCue || !scrollCueIcon || prefersReducedMotion || scrollCueTimeline) {
+            return;
+        }
+
+        gsap.set(scrollCueIcon, { y: 0 });
+
+        scrollCueTimeline = gsap.timeline({
+            repeat: -1,
+            repeatDelay: 0.16,
+        });
+
+        scrollCueTimeline.to(scrollCueIcon, {
+            y: 8,
+            duration: 0.72,
+            ease: 'sine.inOut',
+        });
+
+        scrollCueTimeline.to(scrollCueIcon, {
+            y: 0,
+            duration: 0.72,
+            ease: 'sine.inOut',
+        });
+
+        if (scrollCuePulse) {
+            scrollCueTimeline.fromTo(
+                scrollCuePulse,
+                {
+                    scale: 0.8,
+                    autoAlpha: 0.48,
+                },
+                {
+                    scale: 1.56,
+                    autoAlpha: 0,
+                    duration: 1.44,
+                    ease: 'power1.out',
+                },
+                0,
+            );
+        }
+    };
+
+    const clearAccentRotation = () => {
+        if (accentSwapTimer) {
+            accentSwapTimer.kill();
+            accentSwapTimer = null;
+        }
+
+        if (accentSwapTimeline) {
+            accentSwapTimeline.kill();
+            accentSwapTimeline = null;
+        }
+    };
+
+    const cycleAccentPhrase = () => {
+        if (prefersReducedMotion || !titleAccent || accentPhrases.length <= 1) {
+            return;
+        }
+
+        const outgoingChars = currentAccentChars.length ? currentAccentChars : splitToAnimatedChars(titleAccent);
+        const nextIndex = (accentPhraseIndex + 1) % accentPhrases.length;
+        const nextPhrase = accentPhrases[nextIndex];
+
+        accentSwapTimeline = gsap.to(outgoingChars, {
+            ...createCharsOutAnimation(),
+            onComplete: () => {
+                currentAccentChars = buildAccentChars(nextPhrase);
+
+                if (!currentAccentChars.length) {
+                    accentPhraseIndex = nextIndex;
+                    scheduleAccentRotation();
+                    return;
+                }
+
+                gsap.set(currentAccentChars, createCharsScatterState());
+
+                accentSwapTimeline = gsap.to(currentAccentChars, {
+                    ...createCharsInAnimation(),
+                    ease: 'power4.out',
+                    onComplete: () => {
+                        accentPhraseIndex = nextIndex;
+                        accentSwapTimeline = null;
+                        scheduleAccentRotation();
+                    },
+                });
+            },
+        });
+    };
+
+    const scheduleAccentRotation = () => {
+        if (prefersReducedMotion || !titleAccent || accentPhrases.length <= 1) {
+            return;
+        }
+
+        accentSwapTimer = gsap.delayedCall(HERO_ACCENT_ROTATION_DELAY, () => {
+            accentSwapTimer = null;
+            cycleAccentPhrase();
+        });
+    };
+
+    const startAccentRotation = () => {
+        if (prefersReducedMotion || !titleAccent || accentPhrases.length <= 1) {
+            return;
+        }
+
+        clearAccentRotation();
+        scheduleAccentRotation();
+    };
+
     const runEntryAnimation = () => {
+        const proofItems = proof ? Array.from(proof.children) : [];
+        const actionItems = actions ? Array.from(actions.children) : [];
+
         if (prefersReducedMotion) {
+            if (scrollCue) {
+                gsap.set(scrollCue, { autoAlpha: 1, y: 0 });
+            }
+
+            if (titleAccent) {
+                gsap.set(titleAccent, { autoAlpha: 1, y: 0, rotateX: 0, filter: 'blur(0px)' });
+            }
+
             return;
         }
 
         const mainChars = splitToAnimatedChars(titleMain);
-        const accentChars = splitToAnimatedChars(titleAccent);
-        const allChars = [...mainChars, ...accentChars];
+        currentAccentChars = buildAccentChars(accentPhrases[accentPhraseIndex]);
 
-        if (!allChars.length) {
+        if (scrollCue) {
+            gsap.set(scrollCue, {
+                autoAlpha: 1,
+                y: 0,
+                filter: 'blur(0px)',
+            });
+
+            runScrollCueLoop();
+        }
+
+        if (!mainChars.length) {
             return;
         }
 
@@ -523,15 +741,43 @@ const initWaveHeroAnimation = () => {
             filter: 'blur(0px)',
         });
 
-        gsap.set(allChars, {
-            opacity: 0,
-            y: (index) => 94 - ((index % 5) * 9),
-            x: (index) => Math.sin(index * 0.7) * 28,
-            rotation: (index) => Math.sin(index * 0.45) * 16,
-            filter: 'blur(9px)',
-            transformOrigin: '50% 100%',
-            willChange: 'transform, opacity, filter',
+        gsap.set([eyebrow, description].filter(Boolean), {
+            autoAlpha: 0,
+            y: 20,
+            filter: 'blur(6px)',
         });
+
+        if (titleAccent) {
+            gsap.set(titleAccent, {
+                autoAlpha: 1,
+                y: 0,
+                filter: 'blur(0px)',
+            });
+        }
+
+        if (proofItems.length) {
+            gsap.set(proofItems, {
+                autoAlpha: 0,
+                y: 22,
+                scale: 0.92,
+                filter: 'blur(5px)',
+            });
+        }
+
+        if (actionItems.length) {
+            gsap.set(actionItems, {
+                autoAlpha: 0,
+                y: 18,
+                scale: 0.98,
+                filter: 'blur(5px)',
+            });
+        }
+
+        gsap.set(mainChars, createCharsScatterState());
+
+        if (currentAccentChars.length) {
+            gsap.set(currentAccentChars, createCharsScatterState());
+        }
 
         const entryTimeline = gsap.timeline({
             defaults: {
@@ -549,39 +795,88 @@ const initWaveHeroAnimation = () => {
             0,
         );
 
+        if (eyebrow) {
+            entryTimeline.to(
+                eyebrow,
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    duration: 0.76,
+                    ease: 'power2.out',
+                },
+                0.02,
+            );
+        }
+
         entryTimeline.to(
             mainChars,
-            {
-                opacity: 1,
-                y: 0,
-                x: 0,
-                rotation: 0,
-                filter: 'blur(0px)',
-                duration: 1.06,
-                stagger: {
-                    each: 0.026,
-                    from: 'start',
-                },
-            },
+            createCharsInAnimation(),
             0.06,
         );
 
-        entryTimeline.to(
-            accentChars,
-            {
-                opacity: 1,
-                y: 0,
-                x: 0,
-                rotation: 0,
-                filter: 'blur(0px)',
-                duration: 1.05,
-                stagger: {
-                    each: 0.029,
-                    from: 'start',
+        if (currentAccentChars.length) {
+            entryTimeline.to(
+                currentAccentChars,
+                createCharsInAnimation(),
+                0.34,
+            );
+        }
+
+        if (description) {
+            entryTimeline.to(
+                description,
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    filter: 'blur(0px)',
+                    duration: 0.82,
+                    ease: 'power2.out',
                 },
-            },
-            0.3,
-        );
+                0.46,
+            );
+        }
+
+        if (proofItems.length) {
+            entryTimeline.to(
+                proofItems,
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    scale: 1,
+                    filter: 'blur(0px)',
+                    duration: 0.72,
+                    stagger: {
+                        each: 0.08,
+                        from: 'start',
+                    },
+                    ease: 'power2.out',
+                },
+                0.62,
+            );
+        }
+
+        if (actionItems.length) {
+            entryTimeline.to(
+                actionItems,
+                {
+                    autoAlpha: 1,
+                    y: 0,
+                    scale: 1,
+                    filter: 'blur(0px)',
+                    duration: 0.72,
+                    stagger: {
+                        each: 0.09,
+                        from: 'start',
+                    },
+                    ease: 'power2.out',
+                },
+                0.78,
+            );
+        }
+
+        entryTimeline.add(startAccentRotation, '>-0.08');
+
     };
 
     resizeCanvas();
@@ -670,6 +965,19 @@ const initWaveHeroAnimation = () => {
             },
             0.24,
         );
+
+        if (scrollCue) {
+            timeline.to(
+                scrollCue,
+                {
+                    autoAlpha: 0,
+                    y: 24,
+                    duration: 0.28,
+                    ease: 'power2.out',
+                },
+                0.08,
+            );
+        }
     }
 
     window.addEventListener('resize', scheduleResize, { passive: true });

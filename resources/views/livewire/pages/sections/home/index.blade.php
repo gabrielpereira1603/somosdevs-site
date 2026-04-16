@@ -15,11 +15,41 @@
 
         <div class="relative z-10 flex h-full items-center justify-center px-6">
             <div data-wave-text class="mx-auto max-w-6xl text-center will-change-transform">
+                <p data-wave-eyebrow
+                    class="mx-auto max-w-3xl text-[11px] font-semibold tracking-[0.3em] text-primary uppercase sm:text-xs">
+                    Transformamos demanda em resultado digital
+                </p>
+
                 <h1 data-wave-title
-                    class="font-poppins text-3xl font-bold leading-[1.1] text-secondary-white sm:text-4xl lg:text-6xl xl:text-7xl">
-                    <span data-wave-title-main class="block">Soluções tecnológicas</span>
-                    <span data-wave-title-accent class="mt-2 block text-primary">que fazem o seu negócio avançar!</span>
+                    class="mt-4 font-poppins text-3xl font-bold leading-[1.1] text-secondary-white sm:text-4xl lg:text-6xl xl:text-7xl">
+                    <span data-wave-title-main class="block">Sua empresa pronta para</span>
+                    <span data-wave-title-accent class="mt-2 block text-primary">crescer com software sob medida</span>
                 </h1>
+
+                <p data-wave-description
+                    class="mx-auto mt-6 max-w-3xl text-base leading-relaxed text-zinc-200/90 sm:text-lg lg:text-xl">
+                    Desenvolvimento de software, automações e consultoria estratégica para sua empresa.
+                </p>
+
+                <div data-wave-proof class="mt-7 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+                    <span
+                        class="rounded-full border border-primary/45 bg-primary/14 px-3 py-1.5 text-[11px] font-medium tracking-[0.06em] text-primary uppercase">
+                        Projetos sob medida
+                    </span>
+                    <span
+                        class="rounded-full border border-primary/45 bg-primary/14 px-3 py-1.5 text-[11px] font-medium tracking-[0.06em] text-primary uppercase">
+                        Time técnico sênior
+                    </span>
+                    <span
+                        class="rounded-full border border-primary/45 bg-primary/14 px-3 py-1.5 text-[11px] font-medium tracking-[0.06em] text-primary uppercase">
+                        Sustentação contínua
+                    </span>
+                </div>
+
+                <div data-wave-scroll-cue class="pointer-events-none mt-8 flex items-center justify-center sm:mt-10">
+                    <i data-wave-scroll-cue-icon
+                        class="fa-regular fa-hand-pointer text-3xl text-white drop-shadow-[0_0_16px_rgba(54,64,243,0.45)]"></i>
+                </div>
             </div>
         </div>
     </div>

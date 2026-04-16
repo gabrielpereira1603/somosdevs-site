@@ -26,7 +26,7 @@
     @endif
 
     <div id="site-shell"
-        class="{{ $showIntro ? 'opacity-0' : 'opacity-100' }} transition-opacity duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
+        class="{{ $showIntro ? 'opacity-0' : 'opacity-100' }} min-h-screen flex flex-col transition-opacity duration-[900ms] ease-[cubic-bezier(0.22,1,0.36,1)]">
 
         <header
             class="fixed top-0 left-0 z-50 w-full border-b border-zinc-800/80 bg-[#050505]/86 shadow-[0_12px_42px_rgba(0,0,0,0.52)] backdrop-blur-xl transition-all duration-300">
@@ -39,28 +39,28 @@
                     </a>
                 </div>
 
-                <nav class="hidden flex-1 items-center justify-center gap-6 xl:gap-10 lg:flex">
+                <nav class="hidden flex-1 items-center justify-center gap-6 text-center xl:gap-10 lg:flex">
                     <a href="#home" data-scroll-link data-scroll-target="home"
-                        class="group relative p-2 text-[15px] font-semibold text-zinc-200 transition-colors hover:text-primary">
-                        Home
+                        class="group relative p-2 text-center text-[15px] font-semibold text-zinc-200 transition-colors hover:text-primary">
+                        Início
                         <span
                             class="absolute left-0 bottom-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full"></span>
                     </a>
                     <a href="#sobre" data-scroll-link data-scroll-target="sobre"
-                        class="group relative p-2 text-[15px] font-semibold text-zinc-200 transition-colors hover:text-primary">
-                        Sobre
+                        class="group relative p-2 text-center text-[15px] font-semibold text-zinc-200 transition-colors hover:text-primary">
+                        Sobre Nós
                         <span
                             class="absolute left-0 bottom-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full"></span>
                     </a>
                     <a href="#servicos" data-scroll-link data-scroll-target="servicos"
-                        class="group relative p-2 text-[15px] font-semibold text-zinc-200 transition-colors hover:text-primary">
-                        Serviços
+                        class="group relative p-2 text-center text-[15px] font-semibold text-zinc-200 transition-colors hover:text-primary">
+                        Nossas Soluções
                         <span
                             class="absolute left-0 bottom-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full"></span>
                     </a>
-                    <a href="#trabalhe-conosco" data-scroll-link data-scroll-target="trabalhe-conosco"
-                        class="group relative p-2 text-[15px] font-semibold text-zinc-200 transition-colors hover:text-primary">
-                        Trabalhe Conosco
+                    <a href="#cases-de-sucesso" data-scroll-link data-scroll-target="cases-de-sucesso"
+                        class="group relative p-2 text-center text-[15px] font-semibold text-zinc-200 transition-colors hover:text-primary">
+                        Cases
                         <span
                             class="absolute left-0 bottom-0 h-0.5 w-0 bg-primary transition-all duration-300 group-hover:w-full"></span>
                     </a>
@@ -72,7 +72,7 @@
                             class="relative inline-flex p-px bg-primary/90 transition-all duration-300 ease-out [clip-path:polygon(20px_0,100%_0,100%_100%,0_100%,0_20px)] group-hover:bg-primary group-hover:shadow-[0_0_28px_rgba(54,64,243,0.42)]">
                             <a href="#contato" data-scroll-link data-scroll-target="contato"
                                 class="relative inline-flex items-center gap-2 overflow-hidden bg-[#050505] py-2.5 pl-6 pr-5 font-poppins text-[12px] font-extrabold tracking-[0.2em] text-primary uppercase transition-all duration-300 ease-out [clip-path:polygon(19px_0,100%_0,100%_100%,0_100%,0_19px)] group-hover:bg-primary group-hover:text-white">
-                                <span class="relative z-10 whitespace-nowrap">Contate-nos</span>
+                                <span class="relative z-10 whitespace-nowrap">Consultoria grátis</span>
                                 <i
                                     class="fa-solid fa-envelope text-[12px] transition-transform duration-300 group-hover:translate-x-0.5"></i>
 
@@ -120,15 +120,19 @@
                         class="cursor-pointer rounded-md px-2 py-1.5 transition-colors hover:bg-zinc-800 [&>svg]:size-5 [&>svg]:text-zinc-200" />
                 </div>
 
-                <flux:navlist variant="outline" class="mt-4 px-3">
-                    <flux:navlist.item icon="home" href="#home" data-scroll-link data-scroll-target="home" current>
-                        Home</flux:navlist.item>
-                    <flux:navlist.item icon="code-bracket" href="#sobre" data-scroll-link data-scroll-target="sobre">
-                        Sobre</flux:navlist.item>
-                    <flux:navlist.item icon="cog" href="#servicos" data-scroll-link data-scroll-target="servicos">
-                        Serviços</flux:navlist.item>
-                    <flux:navlist.item icon="briefcase" href="#trabalhe-conosco" data-scroll-link
-                        data-scroll-target="trabalhe-conosco">Trabalhe Conosco</flux:navlist.item>
+                <flux:navlist variant="outline" class="mt-4 px-3 text-center">
+                    <flux:navlist.item icon="home" href="#home" data-scroll-link data-scroll-target="home" current
+                        class="justify-center text-center">
+                        Início</flux:navlist.item>
+                    <flux:navlist.item icon="code-bracket" href="#sobre" data-scroll-link data-scroll-target="sobre"
+                        class="justify-center text-center">
+                        Sobre Nós</flux:navlist.item>
+                    <flux:navlist.item icon="cog" href="#servicos" data-scroll-link data-scroll-target="servicos"
+                        class="justify-center text-center">
+                        Nossas Soluções</flux:navlist.item>
+                    <flux:navlist.item icon="briefcase" href="#cases-de-sucesso" data-scroll-link
+                        data-scroll-target="cases-de-sucesso" class="justify-center text-center">Cases
+                    </flux:navlist.item>
 
                     <div class="mt-5 px-2">
                         <div class="group relative inline-flex w-full">
@@ -136,7 +140,7 @@
                                 class="relative inline-flex w-full p-px bg-primary/90 transition-all duration-300 ease-out [clip-path:polygon(18px_0,100%_0,100%_100%,0_100%,0_18px)] group-hover:bg-primary group-hover:shadow-[0_0_24px_rgba(54,64,243,0.4)]">
                                 <a href="#contato" data-scroll-link data-scroll-target="contato"
                                     class="relative inline-flex w-full items-center justify-center gap-2 overflow-hidden bg-[#050505] py-3 pl-6 pr-5 font-poppins text-[12px] font-extrabold tracking-[0.18em] text-primary uppercase transition-all duration-300 ease-out [clip-path:polygon(17px_0,100%_0,100%_100%,0_100%,0_17px)] group-hover:bg-primary group-hover:text-white">
-                                    <span class="relative z-10">Contate-nos</span>
+                                    <span class="relative z-10">Consultoria grátis</span>
                                     <i
                                         class="fa-solid fa-envelope text-[12px] transition-transform duration-300 group-hover:translate-x-0.5"></i>
 
@@ -173,9 +177,180 @@
         </header>
 
 
-        <div class="mt-26">
+        <div class="mt-26 flex-1">
             {{ $slot }}
         </div>
+
+        <footer class="relative border-t border-zinc-800/70 bg-[#050505]">
+
+            <div class="relative mx-auto max-w-7xl px-4 sm:px-8 xl:px-14">
+                <div class="pt-10">
+                    <div
+                        class="relative overflow-hidden rounded-[28px] border border-zinc-800/80 bg-[#0b0b0b] px-6 py-7 sm:px-8 lg:px-10">
+                        <div
+                            class="pointer-events-none absolute -top-16 right-[-72px] h-44 w-44 rounded-full bg-primary/25 blur-3xl">
+                        </div>
+
+                        <div class="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                            <div class="max-w-2xl">
+                                <p class="text-[11px] font-semibold tracking-[0.2em] text-primary uppercase">
+                                    Vamos Construir Algo Diferente
+                                </p>
+                                <h3 class="mt-2 font-poppins text-2xl font-semibold text-white sm:text-3xl">
+                                    Soluções digitais sob medida para escalar seu negócio com velocidade e qualidade.
+                                </h3>
+                                <p class="mt-3 text-sm leading-relaxed text-zinc-400 sm:text-base">
+                                    Da ideia ao produto em produção, com foco em arquitetura robusta, performance e
+                                    experiência.
+                                </p>
+                            </div>
+
+                            <div class="flex shrink-0">
+                                <a href="#contato" data-scroll-link data-scroll-target="contato"
+                                    class="group relative inline-flex items-center gap-3 overflow-hidden rounded-2xl border border-primary/70 bg-primary/15 px-6 py-3.5 font-poppins text-xs font-semibold tracking-[0.16em] text-primary uppercase transition-all duration-300 hover:border-primary hover:bg-primary hover:text-white hover:shadow-[0_0_26px_rgba(54,64,243,0.42)]">
+                                    <span class="relative z-10">Iniciar Projeto</span>
+                                    <i
+                                        class="fa-solid fa-arrow-right text-[11px] transition-transform duration-300 group-hover:translate-x-1"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-12 py-12 lg:grid-cols-2 xl:grid-cols-4">
+                    <div>
+                        <a href="{{ url('/') }}" class="inline-flex items-center">
+                            <img src="{{ asset('somosdevs/LOGO/Logo-Horizontal-Branco.png') }}" alt="Logo Somos Devs"
+                                class="h-14 w-auto sm:h-16">
+                        </a>
+
+                        <p class="mt-5 max-w-xs text-sm leading-relaxed text-zinc-400">
+                            Somos um parceiro técnico para empresas que querem transformar processos em produtos
+                            digitais confiáveis.
+                        </p>
+
+                        <div class="mt-5 flex flex-wrap gap-2">
+                            <span
+                                class="rounded-full border border-zinc-700 bg-zinc-900/80 px-3 py-1 text-[11px] text-zinc-300">
+                                Performance
+                            </span>
+                            <span
+                                class="rounded-full border border-zinc-700 bg-zinc-900/80 px-3 py-1 text-[11px] text-zinc-300">
+                                Escalabilidade
+                            </span>
+                            <span
+                                class="rounded-full border border-zinc-700 bg-zinc-900/80 px-3 py-1 text-[11px] text-zinc-300">
+                                Confiabilidade
+                            </span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-semibold tracking-[0.14em] text-zinc-200 uppercase">Navegação</h4>
+                        <ul class="mt-5 space-y-3 text-sm text-zinc-400">
+                            <li>
+                                <a href="#home" data-scroll-link data-scroll-target="home"
+                                    class="inline-flex items-center gap-2 transition-colors hover:text-white">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-primary/80"></span>
+                                    Home
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#sobre" data-scroll-link data-scroll-target="sobre"
+                                    class="inline-flex items-center gap-2 transition-colors hover:text-white">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-primary/80"></span>
+                                    Sobre
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#servicos" data-scroll-link data-scroll-target="servicos"
+                                    class="inline-flex items-center gap-2 transition-colors hover:text-white">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-primary/80"></span>
+                                    Serviços
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#contato" data-scroll-link data-scroll-target="contato"
+                                    class="inline-flex items-center gap-2 transition-colors hover:text-white">
+                                    <span class="h-1.5 w-1.5 rounded-full bg-primary/80"></span>
+                                    Contato
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-semibold tracking-[0.14em] text-zinc-200 uppercase">Soluções</h4>
+                        <ul class="mt-5 space-y-3 text-sm text-zinc-400">
+                            <li class="inline-flex items-center gap-2">
+                                <i class="fa-solid fa-code text-[12px] text-primary"></i>
+                                Desenvolvimento de software
+                            </li>
+                            <li class="inline-flex items-center gap-2">
+                                <i class="fa-solid fa-gears text-[12px] text-primary"></i>
+                                Automações
+                            </li>
+                            <li class="inline-flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-[12px] text-primary"></i>
+                                Sustentação e evolução
+                            </li>
+                            <li class="inline-flex items-center gap-2">
+                                <i class="fa-solid fa-lightbulb text-[12px] text-primary"></i>
+                                Consultorias
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="text-sm font-semibold tracking-[0.14em] text-zinc-200 uppercase">Contato</h4>
+
+                        <ul class="mt-5 space-y-3 text-sm text-zinc-400">
+                            <li class="inline-flex items-center gap-2">
+                                <i class="fa-regular fa-envelope text-primary"></i>
+                                <a href="mailto:admin@somosdevs.com" class="transition-colors hover:text-white">
+                                    admin@somosdevs.com
+                                </a>
+                            </li>
+                            <li class="inline-flex items-center gap-2">
+                                <i class="fa-brands fa-whatsapp text-primary"></i>
+                                <a href="https://wa.me/5517976001413" target="_blank" rel="noopener noreferrer"
+                                    class="transition-colors hover:text-white">
+                                    +55 (17) 97600-1413
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="mt-6 flex items-center gap-3">
+                            <a href="#" aria-label="Instagram"
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-zinc-300 transition-all duration-300 hover:border-primary hover:bg-primary hover:text-white">
+                                <i class="fa-brands fa-instagram"></i>
+                            </a>
+                            <a href="#" aria-label="Facebook"
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-zinc-300 transition-all duration-300 hover:border-primary hover:bg-primary hover:text-white">
+                                <i class="fa-brands fa-facebook-f"></i>
+                            </a>
+                            <a href="#" aria-label="LinkedIn"
+                                class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-zinc-700 bg-zinc-900 text-zinc-300 transition-all duration-300 hover:border-primary hover:bg-primary hover:text-white">
+                                <i class="fa-brands fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative border-t border-zinc-800/70 bg-[#030303]">
+                <div
+                    class="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-5 text-xs text-zinc-500 sm:px-8 md:flex-row md:items-center md:justify-between xl:px-14">
+                    <p>© {{ now()->year }} SomosDevs. Todos os direitos reservados.</p>
+
+                    <div class="flex items-center gap-4">
+                        <a href="#" class="transition-colors hover:text-zinc-300">Política de Privacidade</a>
+                        <span class="h-1 w-1 rounded-full bg-zinc-700"></span>
+                        <a href="#" class="transition-colors hover:text-zinc-300">Termos de Uso</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
 
     </div>
 
